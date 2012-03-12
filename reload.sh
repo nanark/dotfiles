@@ -18,6 +18,13 @@ function sub_link_file {
 	ln -sf ${source} ${target}
 }
 
+git submodule sync
+git submodule init
+git submodule update
+git submodule foreach 'git checkout master'
+git submodule foreach 'git submodule init'
+git submodule foreach 'git submodule update'
+
 for i in _vim/_*
 do
 	sub_link_file $i
@@ -29,9 +36,3 @@ do
 done
 
 
-git submodule sync
-git submodule init
-git submodule update
-git submodule foreach 'git checkout master'
-git submodule foreach 'git submodule init'
-git submodule foreach 'git submodule update'
