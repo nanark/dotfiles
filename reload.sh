@@ -1,22 +1,33 @@
 #!/usr/bin/env bash
 function link_file {
-    source="${PWD}/$1"
-    target="${HOME}/${1/_/.}"
-
-    ln -sf ${source} ${target}
+	source="${PWD}/$1"
+	target="${HOME}/${1/_/.}"
+    if [ -e "${target}" ]; then
+		rm ${target}
+	fi
+	ln -sf ${source} ${target}
 }
 
-if [ "$1" = "vim" ]; then
-    for i in _vim*
-    do
-       link_file $i
-    done
-else
-    for i in _*
-    do
-        link_file $i
-    done
-fi
+function sub_link_file {
+	source="${PWD}/$1"
+	file=${1##*/}
+	target="${HOME}/${file/_/.}"
+    if [ -e "${target}" ]; then
+		rm ${target}
+	fi
+	ln -sf ${source} ${target}
+}
+
+for i in _vim/_*
+do
+	sub_link_file $i
+done
+
+for i in _*
+do
+	link_file $i
+done
+
 
 git submodule sync
 git submodule init
